@@ -1,0 +1,17 @@
+.header {
+ 
+  padding: 40px 20px;
+
+  &__list {
+    display: flex;
+    gap: 20px;
+
+    li {
+      a {
+        &.router-link-exact-active {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
