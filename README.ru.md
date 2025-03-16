@@ -197,20 +197,20 @@ import SvgIcon from '@/components/UI/SvgIcon.vue';
 ```vue
 <template>
   <!-- Определение всплывающего окна -->
-  <GlobalPopup id="my-popup" title="Моё всплывающее окно">
+  <BasePopup id="my-popup" title="Моё всплывающее окно">
     <p>Это содержимое моего всплывающего окна</p>
     
     <template #footer>
       <button @click="closePopup">Закрыть</button>
     </template>
-  </GlobalPopup>
+  </BasePopup>
   
   <!-- Кнопка для открытия всплывающего окна -->
   <button @click="openPopup">Открыть всплывающее окно</button>
 </template>
 
 <script setup>
-import GlobalPopup from '@/components/UI/GlobalPopup.vue';
+import BasePopup from '@/components/UI/Popup.vue';
 import { usePopup } from '@/composables/usePopup';
 
 const myPopup = usePopup('my-popup');

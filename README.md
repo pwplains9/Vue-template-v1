@@ -197,20 +197,20 @@ The template includes a powerful popup management system:
 ```vue
 <template>
   <!-- Define the popup -->
-  <GlobalPopup id="my-popup" title="My Popup">
+  <BasePopup id="my-popup" title="My Popup">
     <p>This is my popup content</p>
     
     <template #footer>
       <button @click="closePopup">Close</button>
     </template>
-  </GlobalPopup>
+  </BasePopup>
   
   <!-- Button to open the popup -->
   <button @click="openPopup">Open Popup</button>
 </template>
 
 <script setup>
-import GlobalPopup from '@/components/UI/GlobalPopup.vue';
+import BasePopup from '@/components/UI/Popup.vue';
 import { usePopup } from '@/composables/usePopup';
 
 const myPopup = usePopup('my-popup');
