@@ -13,11 +13,16 @@ import performanceMonitor from '@/utils/performanceMonitor';
 // Initialize performance monitoring in development mode
 if (process.env.NODE_ENV === 'development') {
   performanceMonitor.monitorResources();
+  performanceMonitor.trackMemory();
   console.info('Performance monitoring enabled');
 }
 
 const app = createApp(App);
 
+// Create Pinia store
+const pinia = createPinia();
+
+// Configure router
 let baseURL = import.meta.env.BASE_URL;
 
 const routes = [
@@ -53,6 +58,7 @@ router.beforeEach((to, from) => {
   performanceMonitor.trackNavigation(from.name || 'unknown', to.name || 'unknown');
 });
 
+// Update meta tags for SEO
 router.beforeEach((to) => {
   const { title, description, keyWords } = to.meta;
   const defaultTitle = 'Default Title';
@@ -61,23 +67,27 @@ router.beforeEach((to) => {
 
   document.title = title || defaultTitle;
 
-  const keyWordsElement = document.querySelector('head meta[name="keywords"]');
-  const descriptionElement = document.querySelector('head meta[name="description"]');
-  const ogTitle = document.querySelector('head meta[property="og:title"]');
-  const ogDescription = document.querySelector('head meta[property="og:description"]');
-  const twitterTitle = document.querySelector('head meta[name="twitter:title"]');
-  const twitterDescription = document.querySelector('head meta[name="twitter:description"]');
+  const metaTags = {
+    keywords: document.querySelector('head meta[name="keywords"]'),
+    description: document.querySelector('head meta[name="description"]'),
+    ogTitle: document.querySelector('head meta[property="og:title"]'),
+    ogDescription: document.querySelector('head meta[property="og:description"]'),
+    twitterTitle: document.querySelector('head meta[name="twitter:title"]'),
+    twitterDescription: document.querySelector('head meta[name="twitter:description"]')
+  };
 
-  keyWordsElement.setAttribute('content', keyWords || defaultKeyWords);
-  descriptionElement.setAttribute('content', description || defaultDescription);
-  ogTitle.setAttribute('content', title || defaultTitle);
-  ogDescription.setAttribute('content', description || defaultDescription);
-  twitterTitle.setAttribute('content', title || defaultTitle);
-  twitterDescription.setAttribute('content', description || defaultDescription);
+  if (metaTags.keywords) metaTags.keywords.setAttribute('content', keyWords || defaultKeyWords);
+  if (metaTags.description)
+    metaTags.description.setAttribute('content', description || defaultDescription);
+  if (metaTags.ogTitle) metaTags.ogTitle.setAttribute('content', title || defaultTitle);
+  if (metaTags.ogDescription)
+    metaTags.ogDescription.setAttribute('content', description || defaultDescription);
+  if (metaTags.twitterTitle) metaTags.twitterTitle.setAttribute('content', title || defaultTitle);
+  if (metaTags.twitterDescription)
+    metaTags.twitterDescription.setAttribute('content', description || defaultDescription);
 });
 
-const pinia = createPinia();
-
+// Register UI components
 components.forEach((component) => {
   app.component(component.name, component);
 });
@@ -104,6 +114,7 @@ app.directive('perf', {
   }
 });
 
+// Initialize app
 app.use(vhFix.init);
 app.use(pinia);
 app.use(router);

@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 
 export const usePopupStore = defineStore('popup', {
   state: () => ({
-    activePopups: {},
+    activePopups: {}
   }),
-  
+
   actions: {
     openPopup(id, props = {}) {
       this.activePopups = {
@@ -12,11 +12,11 @@ export const usePopupStore = defineStore('popup', {
         [id]: { isOpen: true, props }
       };
     },
-    
+
     closePopup(id) {
       if (this.activePopups[id]) {
         this.activePopups[id].isOpen = false;
-        
+
         // Remove popup from store after animation completes
         setTimeout(() => {
           const { [id]: _, ...rest } = this.activePopups;
@@ -24,13 +24,13 @@ export const usePopupStore = defineStore('popup', {
         }, 300); // Match the transition duration in Popup.vue
       }
     },
-    
+
     closeAllPopups() {
-      Object.keys(this.activePopups).forEach(id => {
+      Object.keys(this.activePopups).forEach((id) => {
         this.closePopup(id);
       });
     },
-    
+
     updatePopupProps(id, props) {
       if (this.activePopups[id]) {
         this.activePopups[id].props = {
@@ -40,14 +40,14 @@ export const usePopupStore = defineStore('popup', {
       }
     }
   },
-  
+
   getters: {
     isPopupOpen: (state) => (id) => {
       return state.activePopups[id]?.isOpen || false;
     },
-    
+
     getPopupProps: (state) => (id) => {
       return state.activePopups[id]?.props || {};
     }
   }
-}); 
+});

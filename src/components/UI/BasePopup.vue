@@ -1,32 +1,33 @@
 <template>
-  <BasePopup
-    :is-visible="modelValue"
-    :title="title"
-    :size="size"
-    :centered="centered"
-    :show-close-button="showCloseButton"
-    :close-on-overlay-click="closeOnOverlayClick"
-    :close-on-esc="closeOnEsc"
-    @close="close"
-  >
-    <slot></slot>
-    <template v-if="$slots.footer" #footer>
-      <slot name="footer"></slot>
-    </template>
-  </BasePopup>
+  <Teleport to="body">
+    <Transition name="popup-fade">
+      <div v-if="isVisible" class="popup-overlay" @click="closeOnOverlayClick && onClose()">
+        <div class="popup" :class="[size, { 'popup--centered': centered }]" @click.stop>
+          <div class="popup__header">
+            <h3 class="popup__title" v-if="title">{{ title }}</h3>
+            <button v-if="showCloseButton" class="popup__close" @click="onClose" aria-label="Close">
+              <span class="popup__close-icon">×</span>
+            </button>
+          </div>
+          <div class="popup__content">
+            <slot></slot>
+          </div>
+          <div class="popup__footer" v-if="$slots.footer">
+            <slot name="footer"></slot>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
-import BasePopup from './BasePopup.vue';
+import { onMounted, onBeforeUnmount, onUpdated, watch } from 'vue';
 
-defineOptions({
-  name: 'Popup'
-});
-
-defineProps({
-  modelValue: {
+const props = defineProps({
+  isVisible: {
     type: Boolean,
-    default: false
+    required: true
   },
   title: {
     type: String,
@@ -55,12 +56,50 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'close']);
+const emit = defineEmits(['close']);
 
-const close = () => {
-  emit('update:modelValue', false);
+const onClose = () => {
   emit('close');
 };
+
+const handleKeydown = (e) => {
+  if (e.key === 'Escape' && props.isVisible && props.closeOnEsc) {
+    onClose();
+  }
+};
+
+const updateBodyScroll = () => {
+  if (props.isVisible) {
+    document.body.classList.add('popup-open');
+  } else {
+    document.body.classList.remove('popup-open');
+  }
+};
+
+onMounted(() => {
+  if (props.closeOnEsc) {
+    document.addEventListener('keydown', handleKeydown);
+  }
+  updateBodyScroll();
+});
+
+onUpdated(() => {
+  updateBodyScroll();
+});
+
+watch(
+  () => props.isVisible,
+  () => {
+    updateBodyScroll();
+  }
+);
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeydown);
+  if (document.body.classList.contains('popup-open')) {
+    document.body.classList.remove('popup-open');
+  }
+});
 </script>
 
 <style lang="scss">

@@ -9,7 +9,7 @@ const helpers = {
     document.documentElement.classList.contains('is-browser-mobile-safari'),
   isDevices: () => window.innerWidth <= 1024,
   clearText: (text) => text.trim().replace(/\s+/g, ' '),
-  
+
   // Vue 3 transition hooks
   beforeEnter: (el) => {
     gsap.set(el, {
@@ -58,7 +58,7 @@ const scrollLocks = new Set();
 helpers.lockScroll = (state, element, name) => {
   // Ensure element is a DOM element (remove jQuery dependency)
   const targetElement = element?.nodeType ? element : element?.$el || element;
-  
+
   if (!targetElement) {
     console.warn('lockScroll: No valid element provided');
     return;

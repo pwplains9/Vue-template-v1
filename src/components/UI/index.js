@@ -1,4 +1,5 @@
-import svgIcon from '@/components/UI/SvgIcon.vue';
-import popup from '@/components/UI/Popup.vue';
+import SvgIcon from '@/components/UI/SvgIcon.vue';
+import Popup from '@/components/UI/Popup.vue';
+import BasePopup from '@/components/UI/BasePopup.vue';
 
-export default [svgIcon, popup];
+export default [SvgIcon, Popup, BasePopup];

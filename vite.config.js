@@ -21,7 +21,7 @@ export default defineConfig({
     vueJsx(),
     createSvgIconsPlugin({
       // Specify the icon folder to be cached
-      iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')],
       // Specify symbolId format
       symbolId: 'icon-[dir]-[name]',
 
@@ -51,6 +51,7 @@ export default defineConfig({
                     @import "@/styles/_variables.scss";
                     @import "@/styles/mixins/_breakpoint.scss";
                     @import "@/styles/_functions.scss";
+                    @import "@/styles/mixins/_helpers.scss";
                 `
       }
     }

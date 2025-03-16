@@ -15,6 +15,7 @@ A modern Vue 3 template built with Vite, featuring a comprehensive set of tools 
 - **Responsive Design** utilities with viewport detection
 - **Global Popup System** for managing modals and popups
 - **Performance Monitoring** tools for development
+- **SEO Optimization** with meta tag management
 
 ## Getting Started
 
@@ -148,16 +149,24 @@ This runs the `lint.js` script which executes all linting and formatting tools i
 src/
 ├── assets/          # Static assets like images and icons
 ├── components/      # Reusable Vue components
-│   ├── UI/          # UI components (buttons, popups, etc.)
+│   ├── UI/          # UI components (buttons, popups, SvgIcon, etc.)
 │   └── Header/      # Header components
 ├── composables/     # Reusable composition functions
+│   └── usePopup.js  # Popup management composable
 ├── icons/           # SVG icons
+├── layouts/         # Layout components
 ├── pages/           # Page components
 │   ├── Home/        # Home page
 │   └── Article/     # Article page
+├── services/        # API services and external integrations
 ├── stores/          # Pinia stores for state management
 ├── styles/          # Global styles, variables, and mixins
 ├── utils/           # Utility functions
+│   ├── helpers.js           # General helper functions
+│   ├── lazyLoader.js        # Lazy loading utilities
+│   ├── performanceMonitor.js # Performance monitoring tools
+│   ├── vhFix.js             # Viewport height fix for mobile
+│   └── viewportWatcher.js   # Responsive design utilities
 ├── App.vue          # Root component
 ├── main.js          # Application entry point
 └── TransitionView.vue # Page transition component
@@ -179,7 +188,7 @@ import SvgIcon from '@/components/UI/SvgIcon.vue';
 </script>
 ```
 
-Place your SVG icons in the `src/assets/icons` directory.
+Place your SVG icons in the `src/icons` directory.
 
 ### Global Popup System
 
@@ -219,6 +228,20 @@ const closePopup = () => {
 </script>
 ```
 
+For managing multiple popups, you can use the `usePopupManager`:
+
+```js
+import { usePopupManager } from '@/composables/usePopup';
+
+const popupManager = usePopupManager();
+
+// Close all open popups
+popupManager.closeAll();
+
+// Check if any popup is open
+const hasOpenPopups = popupManager.isAnyOpen;
+```
+
 ### Responsive Design
 
 The template includes viewport detection utilities:
@@ -227,7 +250,13 @@ The template includes viewport detection utilities:
 <script setup>
 import { useViewport } from '@/utils/viewportWatcher';
 
+// Default debounce time is 250ms
 const { width, height, isMobile, isTablet, isDesktop } = useViewport();
+
+// Or with custom options
+const viewport = useViewport({
+  debounceTime: 200
+});
 </script>
 
 <template>
@@ -238,6 +267,52 @@ const { width, height, isMobile, isTablet, isDesktop } = useViewport();
   </div>
 </template>
 ```
+
+The viewport watcher uses the following breakpoints:
+- Mobile: < 768px
+- Tablet: 768px - 1024px
+- Desktop: > 1024px
+
+## Performance Monitoring
+
+The template includes performance monitoring tools in development mode:
+
+```vue
+<template>
+  <!-- Add performance monitoring to components -->
+  <div v-perf="'my-component'">
+    <!-- Component content -->
+  </div>
+</template>
+```
+
+The performance monitor provides:
+- Resource loading tracking
+- Memory usage monitoring
+- Navigation performance metrics
+- Component render time tracking
+
+These tools are automatically enabled in development mode and can be accessed in the browser console.
+
+## SEO Optimization
+
+The template includes SEO optimization with meta tag management:
+
+```js
+// In route configuration
+{
+  path: '/article/',
+  name: 'Article',
+  component: Article,
+  meta: {
+    title: 'Article Title',
+    description: 'Article Description',
+    keyWords: 'article, keywords'
+  }
+}
+```
+
+The router automatically updates the document title and meta tags based on the route meta information.
 
 ## Linting and Formatting
 
@@ -275,19 +350,6 @@ node setup-linting.js
 ```
 
 This will install all necessary dependencies and verify the configuration files.
-
-## Performance Optimization
-
-The template includes performance monitoring tools in development mode:
-
-```vue
-<template>
-  <!-- Add performance monitoring to components -->
-  <div v-perf="'my-component'">
-    <!-- Component content -->
-  </div>
-</template>
-```
 
 ## License
 
