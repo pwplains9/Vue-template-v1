@@ -130,4 +130,68 @@ Returns an object with the following properties and methods:
 
 ## Example
 
-See `src/examples/PopupExample.vue` for a complete example of how to use the global popup system. 
+See `src/examples/PopupExample.vue` for a complete example of how to use the global popup system.
+
+# UI Components
+
+## ResponsiveImage
+
+The `ResponsiveImage` component provides an easy way to display responsive images with proper srcset support for different screen sizes and pixel densities.
+
+### Features:
+- Automatic handling of desktop (1024px) and mobile image variants
+- Support for 2x pixel density (retina displays)
+- Lazy loading by default
+- Customizable width and height
+- Accessibility-friendly with required alt text
+
+### Image Naming Convention
+
+For this component to work properly, your images should follow this naming convention:
+
+- Base image: `image.jpg`
+- Desktop image: `image-1024.jpg`
+- Desktop retina: `image-1024@2x.jpg`
+- Mobile image: `image-mobile.jpg`
+- Mobile retina: `image-mobile@2x.jpg`
+
+### Usage Example
+
+```vue
+<template>
+  <div>
+    <h1>Product Display</h1>
+    
+    <!-- Basic usage with required props -->
+    <ResponsiveImage 
+      src="/images/product.jpg"
+      alt="Product description"
+    />
+    
+    <!-- Advanced usage with all props -->
+    <ResponsiveImage 
+      src="/images/product.jpg"
+      alt="Product description"
+      :width="600"
+      :height="400"
+      :lazy="true"
+      imgClass="product-image rounded"
+    />
+  </div>
+</template>
+
+<script setup>
+import ResponsiveImage from '@/components/UI/ResponsiveImage.vue';
+</script>
+```
+
+### Props
+
+| Prop      | Type             | Default | Required | Description                                       |
+|-----------|------------------|---------|----------|---------------------------------------------------|
+| src       | String           | -       | Yes      | Base image source URL                             |
+| alt       | String           | -       | Yes      | Alternative text for accessibility                |
+| width     | Number or String | 'auto'  | No       | Image width (number for px, string for CSS value) |
+| height    | Number or String | 'auto'  | No       | Image height (number for px, string for CSS value)|
+| lazy      | Boolean          | true    | No       | Whether to use lazy loading                       |
+| imgClass  | String           | ''      | No       | Optional CSS class to apply to img element        | 

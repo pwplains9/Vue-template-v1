@@ -19,12 +19,13 @@
 @function breakpointPickCssNth($list, $index, $default: inherit) {
   @each $breakpoint, $value in $list {
     $value: set-nth($default $default $default $default, $index, css-nth($value, $index));
-    $list: map-merge(
-      $list,
-      (
-        $breakpoint: $value
-      )
-    );
+    $list:
+      map-merge(
+        $list,
+        (
+          $breakpoint: $value
+        )
+      );
   }
 
   @return $list;

@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/pages/Home/Home.vue';
 import Article from '@/pages/Article/Article.vue';
 import performanceMonitor from '@/utils/performanceMonitor';
+import tgLinks from '@/directives/tgLinks';
 
 // Initialize performance monitoring in development mode
 if (process.env.NODE_ENV === 'development') {
@@ -117,5 +118,6 @@ app.directive('perf', {
 // Initialize app
 app.use(vhFix.init);
 app.use(pinia);
+app.directive('tg-links', tgLinks);
 app.use(router);
 app.mount('#app');

@@ -143,6 +143,44 @@ yarn lint
 
 This runs the `lint.js` script which executes all linting and formatting tools in sequence.
 
+# Generate Script
+
+This script helps you quickly create components and pages with the proper structure.
+
+## Usage
+
+### Generate a component
+
+```bash
+npm run generate:component MyComponent
+```
+
+This will create:
+- `src/components/MyComponent/`
+- `src/components/MyComponent/MyComponent.vue`
+- `src/components/MyComponent/index.scss`
+
+### Generate a page
+
+```bash
+npm run generate:page PageName
+```
+
+This will create:
+- `src/pages/PageName/`
+- `src/pages/PageName/PageName.vue`
+- `src/pages/PageName/index.scss`
+
+### Generic generate command
+
+```bash
+npm run generate <type> <name>
+```
+
+Where:
+- `<type>` is either "component" or "page"
+- `<name>` is the name of your component or page 
+
 ## Project Structure
 
 ```
@@ -189,6 +227,63 @@ import SvgIcon from '@/components/UI/SvgIcon.vue';
 ```
 
 Place your SVG icons in the `src/icons` directory.
+
+#### Detailed SVG Icon Usage
+
+The `SvgIcon` component provides a simple way to use SVG icons throughout your application.
+
+##### Component Props
+
+| Prop   | Type   | Default | Required | Description                             |
+|--------|--------|---------|----------|-----------------------------------------|
+| name   | String | -       | Yes      | The name of the icon (without prefix)   |
+| prefix | String | 'icon'  | No       | The prefix used in the icon ID          |
+| color  | String | '#333'  | No       | The fill color of the icon              |
+
+##### Adding New Icons
+
+1. Place your SVG files in the `src/icons` directory
+2. The filename will be used as the icon name (e.g., `menu.svg` would be used as `<SvgIcon name="menu" />`)
+3. Icons are automatically registered at build time
+
+##### Examples
+
+Basic usage:
+```vue
+<SvgIcon name="menu" />
+```
+
+With custom color:
+```vue
+<SvgIcon name="arrow-down" color="#FF5500" />
+```
+
+With custom prefix:
+```vue
+<SvgIcon name="close" prefix="my-icon" />
+```
+
+##### Styling SVG Icons
+
+You can style the SVG icon using CSS:
+
+```vue
+<template>
+  <SvgIcon name="menu" class="my-icon" />
+</template>
+
+<style scoped>
+.my-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.my-icon:hover {
+  transform: scale(1.2);
+}
+</style>
+```
 
 ### Global Popup System
 
@@ -272,6 +367,71 @@ The viewport watcher uses the following breakpoints:
 - Mobile: < 768px
 - Tablet: 768px - 1024px
 - Desktop: > 1024px
+
+
+# UI Components
+
+## ResponsiveImage
+
+The `ResponsiveImage` component provides an easy way to display responsive images with proper srcset support for different screen sizes and pixel densities.
+
+### Features:
+- Automatic handling of desktop (1024px) and mobile image variants
+- Support for 2x pixel density (retina displays)
+- Lazy loading by default
+- Customizable width and height
+- Accessibility-friendly with required alt text
+
+### Image Naming Convention
+
+For this component to work properly, your images should follow this naming convention:
+
+- Base image: `image.jpg`
+- Desktop image: `image-1024.jpg`
+- Desktop retina: `image-1024@2x.jpg`
+- Mobile image: `image-mobile.jpg`
+- Mobile retina: `image-mobile@2x.jpg`
+
+### Usage Example
+
+```vue
+<template>
+  <div>
+    <h1>Product Display</h1>
+    
+    <!-- Basic usage with required props -->
+    <ResponsiveImage 
+      src="/images/product.jpg"
+      alt="Product description"
+    />
+    
+    <!-- Advanced usage with all props -->
+    <ResponsiveImage 
+      src="/images/product.jpg"
+      alt="Product description"
+      :width="600"
+      :height="400"
+      :lazy="true"
+      imgClass="product-image rounded"
+    />
+  </div>
+</template>
+
+<script setup>
+import ResponsiveImage from '@/components/UI/ResponsiveImage.vue';
+</script>
+```
+
+### Props
+
+| Prop      | Type             | Default | Required | Description                                       |
+|-----------|------------------|---------|----------|---------------------------------------------------|
+| src       | String           | -       | Yes      | Base image source URL                             |
+| alt       | String           | -       | Yes      | Alternative text for accessibility                |
+| width     | Number or String | 'auto'  | No       | Image width (number for px, string for CSS value) |
+| height    | Number or String | 'auto'  | No       | Image height (number for px, string for CSS value)|
+| lazy      | Boolean          | true    | No       | Whether to use lazy loading                       |
+| imgClass  | String           | ''      | No       | Optional CSS class to apply to img element        |
 
 ## Performance Monitoring
 
